@@ -154,29 +154,29 @@ PDF is primarily a page-description format, not a semantic text format. A PDF do
 
 If the embedded font uses a broken, incomplete, ambiguous, or custom character mapping, the PDF viewer can still display the glyphs correctly because it knows how to draw them, but text extraction can return the wrong Unicode characters. In that case, searching tools such as `pdfgrep`, `pdftotext`, or PDF parsers are not "seeing" the same text that a human eye sees on the page; they are only seeing the Unicode values reconstructed from those internal mappings.
 
-## Why this is common in Devanagari PDFs?
+### Why this is common in Devanagari PDFs?
 
 Devanagari is especially vulnerable because it is a shaped script. Many visible characters are formed from multiple code points, reordered vowel signs, conjuncts, ligatures, and glyph substitutions. In such scripts, the relationship between what is displayed and what is encoded is more complex than in plain Latin text, so extraction failures are more common when the PDF’s internal font mapping is poor.
 
 A second complication is legacy Indian publishing practice. Some PDFs use embedded fonts with custom or non-standard encodings rather than proper Unicode text, particularly in older workflows. In those files, what appears to be Devanagari text may internally map to unrelated code points or garbage sequences, which makes full-text indexing and keyword search unreliable or impossible without additional conversion.
 
-## Why `दरेकर` fails but `दरष कर` matches?
+### Why `दरेकर` fails but `दरष कर` matches?
 
 This usually means the PDF’s extracted text stream is already corrupted or mis-mapped. The rendered glyphs are visually acceptable, but the underlying Unicode sequence that search software receives is not the proper string `दरेकर`; it may instead contain substitute characters, broken ligature expansion, reordered marks, missing combining signs, or entirely wrong code points from a bad `ToUnicode` mapping.
 
 Therefore, when `pdfgrep` searches, it matches the extracted text layer, not the visible appearance. If the text layer says `दरष कर`, then only `दरष कर` will match, even if the page visually appears to say `दरेकर` to a human reader.
 
-## How to verify the issue?
+### How to verify the issue?
 
 A reliable diagnostic test is to copy the suspicious word from the PDF and paste it into a plain text editor. If the pasted text is broken, substituted, split incorrectly, or differs from what is seen on the page, then the PDF’s text layer or font mapping is defective, and search/indexing tools will inherit the same defect.
 
-## What this means for keyword search?
+### What this means for keyword search?
 
 This issue creates false negatives. A correct keyword may return no results even though the name is visibly present in the document, because the searchable layer does not contain the correct Unicode sequence.
 
 For name search projects such as gazette lookup, this means exact-name search alone is unsafe. The search process should include likely broken variants, split forms, alternate spellings, and copied raw text from a known matching PDF page.
 
-## Practical mitigation strategy
+### Practical mitigation strategy
 
 Use a layered search strategy:
 
