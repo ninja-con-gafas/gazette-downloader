@@ -1,4 +1,4 @@
-# Maharashtra eGazette Name-Change Archive Toolkit
+# Maharashtra eGazette Archive Toolkit
 
 A practical workflow to collect Maharashtra eGazette PDFs and search them locally on Linux.
 
@@ -184,3 +184,6 @@ Use a layered search strategy:
 - If no result appears, copy the visually displayed text from the PDF and search for the pasted form.
 - Search for shorter fragments, for example surname stems or initial syllables.
 
+## Limitations
+
+This utility intentionally retrieves only the first page (up to 100 records) of a given search result to mitigate potential abuse and misuse. It does not support parsing or aggregating multi-page results. Additionally, any breaking changes to the source website may cause the utility to stop functioning.
