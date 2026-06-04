@@ -1,0 +1,7 @@
+pdfgrep -i -n --with-filename --context 1 "दरषकर" *.pdf
+pdfgrep -i -n --with-filename --context 1 "दरष कर" *.pdf
+
+pdfgrep -i -n --with-filename --context 1 "Darekar" *.pdf
+
+
+pdfgrep -i -n --with-filename --context 1 "गवगर" *.pdf
